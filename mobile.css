@@ -1,0 +1,47 @@
+/* ── MOBILE D-PAD ── */
+#mobile-controls {
+  display: none;
+  position: absolute;
+  bottom: 28px;
+  left: 28px;
+  z-index: 20;
+}
+@media (pointer: coarse), (max-width: 640px) {
+  #mobile-controls { display: block; }
+}
+
+.dpad {
+  display: grid;
+  grid-template-columns: repeat(3, 56px);
+  grid-template-rows: repeat(3, 56px);
+  gap: 4px;
+}
+.dpad-btn {
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.1s, transform 0.1s;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  touch-action: none;
+}
+.dpad-btn:active { background: rgba(124,58,237,0.25); transform: scale(0.92); }
+.dpad-up    { grid-column: 2; grid-row: 1; }
+.dpad-left  { grid-column: 1; grid-row: 2; }
+.dpad-center { grid-column: 2; grid-row: 2; background: transparent; border: none; pointer-events: none; }
+.dpad-right { grid-column: 3; grid-row: 2; }
+.dpad-down  { grid-column: 2; grid-row: 3; }
+
+/* Responsive canvas sizing */
+@media (max-width: 640px) {
+  .howto-grid { grid-template-columns: 1fr 1fr; }
+  .legend-grid { grid-template-columns: 1fr; }
+  .overlay-panel { padding: 32px 24px; min-width: 290px; }
+  .go-stats { gap: 10px; }
+  .go-stat { padding: 12px 16px; min-width: 80px; }
+  .title-actions { flex-direction: column; }
+}
