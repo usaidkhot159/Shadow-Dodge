@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shadow Dodge — Survive the Dark</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles/main.css" />
+  <link rel="stylesheet" href="styles/screens.css" />
+  <link rel="stylesheet" href="styles/hud.css" />
+  <link rel="stylesheet" href="styles/powerups.css" />
+  <link rel="stylesheet" href="styles/mobile.css" />
+  <link rel="stylesheet" href="styles/animations.css" />
+</head>
+<body>
+  <div id="app">
+
+    <!-- ── TITLE SCREEN ── -->
+    <div id="screen-title" class="screen active">
+      <div class="title-bg">
+        <div class="particle-field" id="particle-field"></div>
+        <div class="vignette"></div>
+      </div>
+      <div class="title-content">
+        <div class="eyebrow">SURVIVAL GAME</div>
+        <h1 class="game-title">
+          <span class="title-shadow-word">SHADOW</span>
+          <span class="title-dodge-word">DODGE</span>
+        </h1>
+        <p class="tagline">Don't let the darkness catch you.</p>
+        <div class="title-stats" id="title-stats">
+          <div class="stat-chip">
+            <span class="stat-label">Best Time</span>
+            <span class="stat-value" id="hs-display">--:--</span>
+          </div>
+          <div class="stat-chip">
+            <span class="stat-label">Games Played</span>
+            <span class="stat-value" id="games-played-display">0</span>
+          </div>
+        </div>
+        <div class="title-actions">
+          <button class="btn-primary" id="btn-play">
+            <span class="btn-icon">▶</span> Play
+          </button>
+          <button class="btn-secondary" id="btn-how">How to Play</button>
+        </div>
+        <div class="difficulty-select">
+          <span class="diff-label">Difficulty</span>
+          <div class="diff-options">
+            <button class="diff-btn" data-diff="easy">EASY</button>
+            <button class="diff-btn active" data-diff="normal">NORMAL</button>
+            <button class="diff-btn" data-diff="hard">HARD</button>
+            <button class="diff-btn" data-diff="extreme">EXTREME</button>
+          </div>
+        </div>
+      </div>
+      <div class="title-footer">
+        <span>WASD or Arrow Keys to move · Collect power-ups to survive</span>
+      </div>
+    </div>
+
+    <!-- ── HOW TO PLAY SCREEN ── -->
+    <div id="screen-howto" class="screen">
+      <div class="howto-bg"></div>
+      <div class="howto-content">
+        <button class="btn-back" id="btn-back-howto">← Back</button>
+        <h2 class="howto-title">How to Play</h2>
+        <div class="howto-grid">
+          <div class="howto-card">
+            <div class="howto-icon">🎮</div>
+            <h3>Move</h3>
+            <p>Use WASD or Arrow Keys to move your character around the arena.</p>
+          </div>
+          <div class="howto-card">
+            <div class="howto-icon">🌑</div>
+            <h3>Survive</h3>
+            <p>The shadow hunts you relentlessly. The longer you survive, the faster it gets.</p>
+          </div>
+          <div class="howto-card">
+            <div class="howto-icon">🏛️</div>
+            <h3>Obstacles</h3>
+            <p>Use walls and pillars to break line-of-sight with the shadow.</p>
+          </div>
+          <div class="howto-card">
+            <div class="howto-icon">⚡</div>
+            <h3>Power-Ups</h3>
+            <p>Collect glowing orbs for speed boosts, freezes, shields, and teleports.</p>
+          </div>
+        </div>
+        <div class="powerup-legend">
+          <h3>Power-Up Guide</h3>
+          <div class="legend-grid">
+            <div class="legend-item"><span class="pu-dot pu-speed"></span><span>Speed Boost — You move 50% faster for 4s</span></div>
+            <div class="legend-item"><span class="pu-dot pu-freeze"></span><span>Freeze — Shadow is frozen for 3s</span></div>
+            <div class="legend-item"><span class="pu-dot pu-shield"></span><span>Shield — One hit protection for 5s</span></div>
+            <div class="legend-item"><span class="pu-dot pu-teleport"></span><span>Teleport — Jump to a random safe spot</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── GAME SCREEN ── -->
+    <div id="screen-game" class="screen">
+      <div id="hud">
+        <div class="hud-left">
+          <div class="hud-item">
+            <span class="hud-label">TIME</span>
+            <span class="hud-value" id="timer-display">00:00</span>
+          </div>
+          <div class="hud-item">
+            <span class="hud-label">BEST</span>
+            <span class="hud-value" id="best-display">00:00</span>
+          </div>
+        </div>
+        <div class="hud-center">
+          <div class="difficulty-badge" id="diff-badge">NORMAL</div>
+          <div class="wave-badge" id="wave-badge">WAVE <span id="wave-num">1</span></div>
+        </div>
+        <div class="hud-right">
+          <div class="active-powerups" id="active-powerups"></div>
+          <button class="btn-mute" id="btn-mute" title="Toggle sound">🔊</button>
+          <button class="btn-pause" id="btn-pause">⏸</button>
+        </div>
+      </div>
+      <canvas id="game-canvas"></canvas>
+      <div id="mobile-controls">
+        <div class="dpad">
+          <button class="dpad-btn dpad-up" data-dir="up">▲</button>
+          <button class="dpad-btn dpad-left" data-dir="left">◀</button>
+          <button class="dpad-btn dpad-center"></button>
+          <button class="dpad-btn dpad-right" data-dir="right">▶</button>
+          <button class="dpad-btn dpad-down" data-dir="down">▼</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PAUSE SCREEN ── -->
+    <div id="screen-pause" class="screen overlay-screen">
+      <div class="overlay-panel">
+        <h2 class="overlay-title">PAUSED</h2>
+        <div class="pause-stats">
+          <div class="pause-stat">
+            <span>Survival Time</span>
+            <span id="pause-time">00:00</span>
+          </div>
+        </div>
+        <div class="overlay-actions">
+          <button class="btn-primary" id="btn-resume">Resume</button>
+          <button class="btn-secondary" id="btn-restart-pause">Restart</button>
+          <button class="btn-ghost" id="btn-menu-pause">Main Menu</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── GAME OVER SCREEN ── -->
+    <div id="screen-gameover" class="screen">
+      <div class="go-bg">
+        <div class="go-particles" id="go-particles"></div>
+      </div>
+      <div class="go-content">
+        <div class="go-caught-text">CAUGHT.</div>
+        <h2 class="go-title">You survived</h2>
+        <div class="go-time" id="go-time">00:00</div>
+        <div class="go-record" id="go-record"></div>
+        <div class="go-stats">
+          <div class="go-stat">
+            <span class="go-stat-label">Best Time</span>
+            <span class="go-stat-val" id="go-best">--:--</span>
+          </div>
+          <div class="go-stat">
+            <span class="go-stat-label">Power-ups</span>
+            <span class="go-stat-val" id="go-powerups">0</span>
+          </div>
+          <div class="go-stat">
+            <span class="go-stat-label">Wave</span>
+            <span class="go-stat-val" id="go-wave">1</span>
+          </div>
+        </div>
+        <div class="go-actions">
+          <button class="btn-primary" id="btn-restart">Play Again</button>
+          <button class="btn-secondary" id="btn-menu-go">Main Menu</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── COUNTDOWN OVERLAY ── -->
+    <div id="countdown-overlay" class="overlay-screen hidden">
+      <div class="countdown-number" id="countdown-num">3</div>
+    </div>
+
+    <!-- ── WAVE ANNOUNCEMENT ── -->
+    <div id="wave-announce" class="wave-announce hidden">
+      <div class="wave-announce-inner">
+        <div class="wave-announce-label">WAVE</div>
+        <div class="wave-announce-num" id="wave-announce-num">2</div>
+        <div class="wave-announce-sub" id="wave-announce-sub">Shadow Speed ↑</div>
+      </div>
+    </div>
+
+  </div><!-- #app -->
+
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>
