@@ -1,0 +1,28 @@
+/* ── POWER-UP VISUAL TOKENS ── */
+/* Used in canvas via JS, this file documents the design system for power-ups */
+/* and provides styles for any DOM-based power-up elements */
+
+.powerup-pickup-toast {
+  position: fixed;
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-10px);
+  background: var(--bg-raised);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: var(--radius-md);
+  padding: 10px 24px;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--text-primary);
+  z-index: 100;
+  animation: toastIn 0.3s ease, toastOut 0.3s ease 1.7s forwards;
+  pointer-events: none;
+  white-space: nowrap;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+}
+.powerup-pickup-toast.speed    { border-color: rgba(250,204,21,0.5); color: var(--pu-speed); }
+.powerup-pickup-toast.freeze   { border-color: rgba(56,189,248,0.5); color: var(--pu-freeze); }
+.powerup-pickup-toast.shield   { border-color: rgba(74,222,128,0.5); color: var(--pu-shield); }
+.powerup-pickup-toast.teleport { border-color: rgba(244,114,182,0.5); color: var(--pu-teleport); }
